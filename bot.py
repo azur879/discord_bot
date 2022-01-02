@@ -97,22 +97,25 @@ async def W(ctx,*, arg: str = None):
 
 		if entries_int > 0:
 			# get prev. weigh in val.
-			prev_val = float(wks.cell((entries_int + 3, col_counter)).value)
+			prev_val = wks.cell((entries_int + 3, col_counter)).value
 			# get prev. time
 			prev_time_str = wks.cell((entries_int + 3, col_counter + 1)).value
 			prev_time_datetime = datetime.strptime(prev_time_str, '%Y.%m.%d %H:%M')
 			print('prev_time_datetime is: ', prev_time_datetime)
 
 			# calc. weight difference
-			val_diff = float(arg) - prev_val
+			val_diff = float(arg) - float(prev_val)
 			print("val_diff is: %.1f" % val_diff)
 
-			# calc. time difference
-			time_diff = (now - prev_time_datetime).days
-			print('time_diff in days is: ', time_diff)
+			# calc. time difference sec
+			time_diff_sec = (now - prev_time_datetime).seconds
+			time_diff_h = (time_diff_sec//3600)
+			time_diff_fd = float(time_diff_h)/24
+
+			print('time_diff in days is: %.1f ' % time_diff_fd)
 
 		# announce in disc channel
-			await ctx.send(f'Sampled {userID_name}\'s {entries_int+1}th entry: {arg}kg\n %.1fkg in {time_diff} days.' %val_diff)
+			await ctx.send(f'Sampled {userID_name}\'s {entries_int+1}th entry: {arg}kg\n %.1fkg in %.1f days.' % (val_diff, time_diff_fd))
 
 		else:
 			print('doe something eslse')
@@ -183,7 +186,7 @@ async def new_loser(ctx, usr: discord.Member=None):
 			#usr = await bot.fetch_user(user)
 			arg = str(usr.id)
 			#print('USR IS: ',str(usr))
-			first_row = wks.get_row(1,include_tailing_empty=False)
+			first_row = wks.get_row(1, include_tailing_empty=False)
 			if arg in first_row:				
 				await ctx.send(f'{usr} is already a loser')
 			else:
@@ -197,15 +200,15 @@ async def new_loser(ctx, usr: discord.Member=None):
 
 				await ctx.send(f'{usr} added.')
 			
-		except:
+		finally:
 			await ctx.send('something went wrong')
 	else:
-		print(userID, ' tried adding')
+		print(userid_sender, ' tried adding')
 		await ctx.send('no')
 
 @info.error
-async def info_error(ctx,error):
-	if isinstance(error,commands.BadArgument):
+async def info_error(ctx, error):
+	if isinstance(error, commands.BadArgument):
 		await ctx.send('error, try @<user>')
 
 
