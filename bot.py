@@ -16,7 +16,7 @@ def num_to_col_letter(num):
 def next_available_row(sheet,col_to_sample, max_row_range):
 	col_letter = num_to_col_letter(col_to_sample)
 	col_letter2 = num_to_col_letter(col_to_sample+1)
-	for x in range(1, max_row_range):
+	for x in range(2, max_row_range):
 		cell_coord = col_letter+ str(x)
 		if sheet.cell(cell_coord).value =="":
 			return cell_coord, col_letter2+str(x)
@@ -72,7 +72,7 @@ async def W(ctx,*, arg: str = None):
 	except:
 		await ctx.send(f'`{arg}` can\'t be converted to a float')
 		return
-	counter=1
+	col_counter=1
 	userID_name = ctx.message.author.name
 	userID = ctx.message.author.id
 	first_row = wks.get_row(1, include_tailing_empty=False)
@@ -85,15 +85,15 @@ async def W(ctx,*, arg: str = None):
 			if item == str(userID):
 				break
 			else:
-				counter+=1
+				col_counter+=1
 		#letter_col = num_to_col_letter(counter)
 
 		#find first emptry row of above col
-		coord, coord2 = next_available_row(wks, counter, 1000)
+		coord, coord2 = next_available_row(wks, col_counter, 1000)
 		
 
 
-		print('counter is ', counter, ' coord is: ', coord)
+		print('counter is ', col_counter, ' coord is: ', coord)
 		valuess1=[]
 		valuess2=[]
 		valuess1.append(arg)
