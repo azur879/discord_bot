@@ -92,7 +92,7 @@ async def W(ctx,*, arg: str = None):
 		# cast number to int
 		entries_int = int(entries_string.split()[1])
 
-		# sample now's time
+		# sample now's time.
 		now = datetime.today()
 
 		if entries_int > 0:
