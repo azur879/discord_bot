@@ -155,7 +155,7 @@ async def new_loser(ctx, usr: discord.Member=None):
 		await ctx.send('bruh, no argument')
 		return
 	userID_sender = ctx.message.author.id
-	print('user is:', user)
+	print('user is:', usr)
 	if userID_sender == 328851738142703627:
 		print('MATCH')
 		try:
