@@ -16,7 +16,7 @@ def num_to_col_letter(num):
 def next_available_row(sheet,col_to_sample, max_row_range):
 	col_letter = num_to_col_letter(col_to_sample)
 	col_letter2 = num_to_col_letter(col_to_sample+1)
-	for x in range(2, max_row_range):
+	for x in range(3, max_row_range):
 		cell_coord = col_letter+ str(x)
 		if sheet.cell(cell_coord).value =="":
 			return cell_coord, col_letter2+str(x)
@@ -156,9 +156,9 @@ async def new_loser(ctx, usr: discord.Member=None):
 	if usr==None:
 		await ctx.send('bruh, no argument')
 		return
-	userID_sender = ctx.message.author.id
+	userid_sender = ctx.message.author.id
 	print('user is:', usr)
-	if userID_sender == 328851738142703627:
+	if userid_sender == 328851738142703627:
 		print('MATCH')
 		try:
 			#usr = await bot.fetch_user(user)
@@ -168,18 +168,14 @@ async def new_loser(ctx, usr: discord.Member=None):
 			if arg in first_row:				
 				await ctx.send(f'{usr} is already a loser')
 			else:
-				values=[]
-				values2=[]
-				values.append(arg)
-				values2.append(str(usr))
-				#print(values)
-				col_nr = len(first_row)+1
-				letter_col = num_to_col_letter(col_nr)
-				letter_col2 = num_to_col_letter(col_nr+1)
+				#start column of range
+				col_nr = len(first_row) + 1
+				# define range of header for new loser
+				newHeader_range = pygsheets.datarange.DataRange(start=(1, col_nr), end=(3, col_nr+1), worksheet=wks)
+				#update range with values
+				newHeader_range.update_values(values=[[str(usr.id), str(usr)], ['entries 0', ''],
+											 ['Weight [kg]', 'Datetime']])  # row matrix. [[1, 2, 3]]=col matrix
 
-				wks.append_table(values, start=letter_col+'1', end=None, dimension='COLUMNS', overwrite=True)
-				wks.append_table(values2, start=letter_col2+'1', end=None, dimension='COLUMNS', overwrite=True)
-				wks.cell(letter_col+'2').value = 'Entries 0'
 				await ctx.send(f'{usr} added.')
 			
 		except:
