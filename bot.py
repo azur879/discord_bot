@@ -149,16 +149,18 @@ async def info(ctx, user: discord.Member=None):
 	await ctx.send(f'{user}\'s id is: `{user.id}`')
 
 @bot.command()
-async def new_loser(ctx, user: discord.Member=None):
+async def new_loser(ctx, usr: discord.Member=None):
 	"""Adds new loser: !new_loser id"""
-	if user==None:
+	if usr==None:
 		await ctx.send('bruh, no argument')
 		return
-	userID = user.id
-	if userID == 328851738142703627:
+	userID_sender = ctx.message.author.id
+	print('user is:', user)
+	if userID_sender == 328851738142703627:
 		print('MATCH')
 		try:
-			usr = await bot.fetch_user(arg)
+			#usr = await bot.fetch_user(user)
+			arg = user.id
 			#print('USR IS: ',str(usr))
 			first_row = wks.get_row(1,include_tailing_empty=False)
 			if arg in first_row:				
@@ -172,8 +174,10 @@ async def new_loser(ctx, user: discord.Member=None):
 				col_nr = len(first_row)+1
 				letter_col = num_to_col_letter(col_nr)
 				letter_col2 = num_to_col_letter(col_nr+1)
+				wks.unlink()
 				wks.append_table(values, start=letter_col+'1', end=None, dimension='COLUMNS', overwrite=True)
 				wks.append_table(values2, start=letter_col2+'1', end=None, dimension='COLUMNS', overwrite=True)
+				wks.link()
 				await ctx.send(f'{usr} added.')
 			
 		except:
