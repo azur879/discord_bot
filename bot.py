@@ -112,7 +112,7 @@ async def W(ctx,*, arg: str = None):
 			print('time_diff in days is: ', time_diff)
 
 		# announce in disc channel
-			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n %.1fkg in {time_diff} days.' %val_diff)
+			await ctx.send(f'Sampled {userID_name}\'s {entries_int+1}th entry: {arg}kg\n %.1fkg in {time_diff} days.' %val_diff)
 
 		else:
 			print('doe something eslse')
