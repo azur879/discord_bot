@@ -116,7 +116,7 @@ async def W(ctx,*, arg: str = None):
 
 		else:
 			print('doe something eslse')
-			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n1st entry, gambate!)
+			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n1st entry, gambate!')
 
 		# today string val for insertion in sheet
 		now_string = "%a.%a.%a %a:%a" % (now.year, now.month, now.day, now.hour, now.minute)
