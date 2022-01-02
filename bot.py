@@ -104,7 +104,7 @@ async def W(ctx,*, arg: str = None):
 			print('prev_time_datetime is: ', prev_time_datetime)
 
 			# calc. weight difference
-			val_diff = arg - prev_val
+			val_diff = float(arg) - prev_val
 			print("val_diff is: %.1f" % val_diff)
 
 			# calc. time difference
@@ -112,7 +112,7 @@ async def W(ctx,*, arg: str = None):
 			print('time_diff in days is: ', time_diff)
 
 		# announce in disc channel
-			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n{val_diff}kg in {time_diff} days.')
+			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n %.1fkg in {time_diff} days.' %val_diff)
 
 		else:
 			print('doe something eslse')
