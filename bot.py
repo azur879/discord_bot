@@ -67,50 +67,69 @@ async def W(ctx,*, arg: str = None):
 	if arg == None:
 		await ctx.send('bruh, no argument')
 		return
-	try: 
+	try:
 		float(arg)
 	except:
 		await ctx.send(f'`{arg}` can\'t be converted to a float')
-		return
-	col_counter=1
+		print('wrong 123')
+	col_counter = 1
 	userID_name = ctx.message.author.name
 	userID = ctx.message.author.id
 	first_row = wks.get_row(1, include_tailing_empty=False)
 	print('user id is: ', userID)
 
 	if str(userID) in first_row:
-		await ctx.send(f'Sampled {userID_name}\'s weight of {arg}kg')
-		#look for loser's column
+		# look for loser's column
 		for item in first_row:
 			if item == str(userID):
 				break
 			else:
-				col_counter+=1
-		#letter_col = num_to_col_letter(counter)
-
-		#find first emptry row of above col
-		coord, coord2 = next_available_row(wks, col_counter, 1000)
-		
+				col_counter += 1
 
 
-		print('counter is ', col_counter, ' coord is: ', coord)
-		valuess1=[]
-		valuess2=[]
-		valuess1.append(arg)
-		print('value1 is ', valuess1)
-		s = datetime.today()
-		asd = "%a.%a.%a %a:%a" %(s.year, s.month, s.day, s.hour, s.minute)
-		valuess2.append(asd)
-		print('value2 is ', valuess2)
-		#print('letter to col: ', letter_col,'. ', letter_col+
-		#wks.append_table(values=valuess, start=letter_col+'3', end=None, dimension='ROWS', overwrite=True)
+		# copy entry counter
+		entries_string = wks.cell((2, col_counter)).value
+		# cast number to int
+		entries_int = int(entries_string.split()[1])
 
-		wks.update_value(coord, str(arg))
-		wks.update_value(coord2, str(asd))
+		# sample now's time
+		now = datetime.today()
 
-		#await ctx.send(f'{userID_name}\'s weight today: {arg}kg')
-		valuess1 = []
-		valuess2 = []
+		if entries_int > 0:
+			# get prev. weigh in val.
+			prev_val = float(wks.cell((entries_int + 3, col_counter)).value)
+			# get prev. time
+			prev_time_str = wks.cell((entries_int + 3, col_counter + 1)).value
+			prev_time_datetime = datetime.strptime(prev_time_str, '%Y.%m.%d %H:%M')
+			print('prev_time_datetime is: ', prev_time_datetime)
+
+			# calc. weight difference
+			val_diff = arg - prev_val
+			print("val_diff is: %.1f" % val_diff)
+
+			# calc. time difference
+			time_diff = (now - prev_time_datetime).days
+			print('time_diff in days is: ', time_diff)
+
+		# announce in disc channel
+			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n{val_diff}kg in {time_diff} days.)
+
+		else:
+			print('doe something eslse')
+			await ctx.send(f'{userID_name}\'s weight today: {arg}kg\n1st entry, gambate!)
+
+		# today string val for insertion in sheet
+		now_string = "%a.%a.%a %a:%a" % (now.year, now.month, now.day, now.hour, now.minute)
+
+		# define range for new entry
+		new_entry_range = pygsheets.datarange.DataRange(start=(entries_int + 3 + 1, col_counter),
+														end=(entries_int + 3 + 1, col_counter + 1), worksheet=wks)
+		print('new_entry_range is: ', new_entry_range)
+		# update range with new entry
+		new_entry_range.update_values(values=[[str(arg), now_string]])  # row matrix. [[1, 2, 3]]=col matrix
+
+		# update entry counter cell
+		wks.update_value((2, col_counter), 'entries ' + str(entries_int + 1))
 			
 		
 	
