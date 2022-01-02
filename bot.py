@@ -160,7 +160,7 @@ async def new_loser(ctx, usr: discord.Member=None):
 		print('MATCH')
 		try:
 			#usr = await bot.fetch_user(user)
-			arg = usr.id
+			arg = str(usr.id)
 			#print('USR IS: ',str(usr))
 			first_row = wks.get_row(1,include_tailing_empty=False)
 			if arg in first_row:				
