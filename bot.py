@@ -1,7 +1,4 @@
-#new line
-#two line
-#three line
-#four line
+
 import discord
 import pygsheets
 from discord.ext import commands
@@ -30,14 +27,13 @@ with open("api_file.bin", encoding="utf-8") as binary_file:
 	discordKey = binary_file.read()
 
 
-
+#authorize to google
 gc = pygsheets.authorize(service_file='serviceAccKey.json')
-print(gc)
 sh = gc.open('ss_losers')
 wks = sh[0]
 
-f = next_available_row(wks, 1, 100)
-print(f)
+#f = next_available_row(wks, 1, 100)
+#print(f)
 
 
 #wks.update_value('A2', "derp")
@@ -106,8 +102,10 @@ async def W(ctx,*, arg: str = None):
 		print('value2 is ', valuess2)
 		#print('letter to col: ', letter_col,'. ', letter_col+
 		#wks.append_table(values=valuess, start=letter_col+'3', end=None, dimension='ROWS', overwrite=True)
+		wks.unlink()
 		wks.update_value(coord, str(arg))
 		wks.update_value(coord2, str(asd))
+		wks.link()
 		#await ctx.send(f'{userID_name}\'s weight today: {arg}kg')
 		valuess1=[]
 		valuess2=[]
@@ -151,12 +149,12 @@ async def info(ctx, user: discord.Member=None):
 	await ctx.send(f'{user}\'s id is: `{user.id}`')
 
 @bot.command()
-async def new_loser(ctx,*, arg:str=None):
+async def new_loser(ctx, user: discord.Member=None):
 	"""Adds new loser: !new_loser id"""
-	if arg==None:
-		await ctx.send('no')
+	if user==None:
+		await ctx.send('bruh, no argument')
 		return
-	userID = ctx.message.author.id
+	userID = user.id
 	if userID == 328851738142703627:
 		print('MATCH')
 		try:
