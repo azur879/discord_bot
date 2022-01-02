@@ -76,16 +76,18 @@ async def W(ctx,*, arg: str = None):
 	userID_name = ctx.message.author.name
 	userID = ctx.message.author.id
 	first_row = wks.get_row(1, include_tailing_empty=False)
-	print('user id is: ',userID)
+	print('user id is: ', userID)
 
 	if str(userID) in first_row:
 		await ctx.send(f'Sampled {userID_name}\'s weight of {arg}kg')
+		#look for loser's column
 		for item in first_row:
 			if item == str(userID):
 				break
 			else:
 				counter+=1
 		#letter_col = num_to_col_letter(counter)
+
 		#find first emptry row of above col
 		coord, coord2 = next_available_row(wks, counter, 1000)
 		
@@ -102,13 +104,13 @@ async def W(ctx,*, arg: str = None):
 		print('value2 is ', valuess2)
 		#print('letter to col: ', letter_col,'. ', letter_col+
 		#wks.append_table(values=valuess, start=letter_col+'3', end=None, dimension='ROWS', overwrite=True)
-		wks.unlink()
+
 		wks.update_value(coord, str(arg))
 		wks.update_value(coord2, str(asd))
-		wks.link()
+
 		#await ctx.send(f'{userID_name}\'s weight today: {arg}kg')
-		valuess1=[]
-		valuess2=[]
+		valuess1 = []
+		valuess2 = []
 			
 		
 	
@@ -174,10 +176,10 @@ async def new_loser(ctx, usr: discord.Member=None):
 				col_nr = len(first_row)+1
 				letter_col = num_to_col_letter(col_nr)
 				letter_col2 = num_to_col_letter(col_nr+1)
-				#wks.unlink()
+				wks.unlink()
 				wks.append_table(values, start=letter_col+'1', end=None, dimension='COLUMNS', overwrite=True)
 				wks.append_table(values2, start=letter_col2+'1', end=None, dimension='COLUMNS', overwrite=True)
-				#wks.link()
+				wks.link()
 				await ctx.send(f'{usr} added.')
 			
 		except:
