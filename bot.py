@@ -176,10 +176,10 @@ async def new_loser(ctx, usr: discord.Member=None):
 				col_nr = len(first_row)+1
 				letter_col = num_to_col_letter(col_nr)
 				letter_col2 = num_to_col_letter(col_nr+1)
-				wks.unlink()
+
 				wks.append_table(values, start=letter_col+'1', end=None, dimension='COLUMNS', overwrite=True)
 				wks.append_table(values2, start=letter_col2+'1', end=None, dimension='COLUMNS', overwrite=True)
-				wks.link()
+				wks.cell(letter_col+'2').value = 'Entries 0'
 				await ctx.send(f'{usr} added.')
 			
 		except:
