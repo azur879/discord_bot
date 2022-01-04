@@ -1,9 +1,11 @@
-
+import matplotlib.pyplot as plt
+import pandas
 import discord
 import pygsheets
 from discord.ext import commands
 from datetime import datetime
-import io
+
+
 
 def num_to_col_letter(num):
 	letters=''
@@ -214,3 +216,4 @@ async def info_error(ctx, error):
 
 
 bot.run(discordKey)
+#asd
